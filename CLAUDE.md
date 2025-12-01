@@ -12,25 +12,35 @@ This repository uses Python for solutions with the following structure:
 - Each day has its own directory: `days/01/`, `days/02/`, etc.
 - Each day's directory contains:
   - `INSTRUCTIONS.md` - The puzzle story and task description
-  - `solution.py` - Python solution script (core logic only)
-  - `test.py` - Test suite with multiple test cases
+  - Solution files (always two separate files):
+    - `solution_part1.py` - Part 1 solution
+    - `solution_part2.py` - Part 2 solution
+  - `test.py` - Test suite with multiple test cases for both parts
   - `input.txt` - Actual puzzle input (user-specific)
-  - `README.md` - Solution documentation and approach
+  - `README.md` - Solution documentation and approach (MUST be kept in sync with code)
 
 ### Running Solutions
 
-To run a day's solution:
+Using mise tasks (recommended):
 ```bash
-cd days/NN  # NN is the zero-padded day number (01, 02, etc.)
-python3 solution.py              # Uses input.txt by default, outputs raw answer
-python3 solution.py custom.txt   # Uses specified input file
-python3 solution.py | pbcopy     # Copy answer to clipboard (macOS)
+mise run solve 1         # Run Day 1 both parts (outputs two lines)
+mise run solve 1 1       # Run Day 1 Part 1 only
+mise run solve 1 2       # Run Day 1 Part 2 only
+mise run test 1          # Run tests for Day 1
 ```
 
-To run tests:
+Direct Python execution:
 ```bash
-cd days/NN
-python3 test.py                  # Runs all test cases with descriptive output
+cd days/NN  # NN is the zero-padded day number (01, 02, etc.)
+
+# Run solutions:
+python3 solution_part1.py              # Run Part 1
+python3 solution_part2.py              # Run Part 2
+python3 solution_part1.py custom.txt   # Use custom input
+python3 solution_part2.py | pbcopy     # Copy Part 2 answer to clipboard (macOS)
+
+# Run tests:
+python3 test.py                        # Runs all test cases with descriptive output
 ```
 
 ## Development Workflow
@@ -38,21 +48,28 @@ python3 test.py                  # Runs all test cases with descriptive output
 ### Creating New Day Solutions
 
 When implementing or testing solutions:
-1. Each day's puzzle has two parts that build on each other
-2. Part 2 is revealed only after completing Part 1
-3. Input data is unique per user and should not be committed to public repositories
-4. Test with provided example inputs before running on actual puzzle input
+1. **Always create separate files from the start**: `solution_part1.py` and `solution_part2.py`
+2. Each day's puzzle has two parts that build on each other
+3. Part 2 is revealed only after completing Part 1
+4. Implement Part 1 first, then add Part 2 when it's revealed
+5. Input data is unique per user and should not be committed to public repositories
+6. Test with provided example inputs before running on actual puzzle input
 
 ### Testing Approach
 
-**IMPORTANT**: Tests should be in a separate `test.py` file that imports from `solution.py`.
+**IMPORTANT**: Tests should be in a separate `test.py` file that imports from both solution files.
 
-- Create a `test_example()` function with the example from the puzzle description
+- Create test functions for both Part 1 and Part 2 (e.g., `test_example_part1()`, `test_example_part2()`)
 - Add test functions for edge cases (wrap-around, boundary conditions, etc.)
 - Each test should have descriptive names and inline comments explaining the test case
 - Use assertions to verify expected results
 - Include a `run_tests()` function that runs all test functions sequentially
-- Tests import the `solve()` function from the solution module
+
+**Import pattern:**
+```python
+from solution_part1 import solve as solve_part1
+from solution_part2 import solve as solve_part2
+```
 
 ### Common Patterns
 
@@ -61,57 +78,85 @@ When implementing or testing solutions:
 - Consider performance for larger inputs (some puzzles require optimization)
 - Part 2 often requires rethinking Part 1's approach for efficiency
 
+### File Structure Philosophy
+
+**Always use split files:**
+- Create `solution_part1.py` when implementing Part 1
+- Create `solution_part2.py` when Part 2 is revealed
+- This is the standard and only approach for this project
+
+**Why split files:**
+- Advent of Code puzzles always have two parts
+- Part 2 often requires different logic or optimizations
+- Cleaner separation of concerns
+- Easier to run and test parts independently
+- Aligns with mise task structure
+- Each file has a single, clear responsibility
+
 ## Code Organization
 
 ### Solution Script Template
 
-Each `solution.py` should follow this structure:
+**Template for `solution_part1.py` and `solution_part2.py`:**
+
+Each solution file should follow this structure:
 1. Shebang line: `#!/usr/bin/env python3`
-2. Docstring with day title, link, and task summary
+2. Docstring with day title, link, and **which part** this solves
 3. Import `sys` for command-line argument parsing
 4. `solve(data)` function that takes input data directly (list, string, etc.)
+   - Single `solve()` function per file (each file handles one part)
 5. `solve_from_file(filename)` function to read and solve from a file
 6. `main()` function that:
    - Parses command-line args (defaults to 'input.txt')
    - Solves puzzle with specified input file
-   - **IMPORTANT**: Only prints the raw answer (no decorative output) to support piping (e.g., `python3 solution.py | pbcopy`)
+   - **IMPORTANT**: Only prints the raw answer (no decorative output) to support piping (e.g., `python3 solution_part1.py | pbcopy`)
 7. Guard: `if __name__ == '__main__':`
 
 ### Test Script Template
 
-Each `test.py` should follow this structure:
+**Template for `test.py`:**
+
 1. Shebang line: `#!/usr/bin/env python3`
 2. Docstring describing the test suite
-3. Import statement: `from solution import solve`
+3. **Imports:**
+   ```python
+   from solution_part1 import solve as solve_part1
+   from solution_part2 import solve as solve_part2
+   ```
 4. Multiple `test_*()` functions for different test cases:
-   - `test_example()` - the example from the puzzle
-   - Additional tests for edge cases
-5. `run_tests()` function that runs all test functions
+   - `test_example_part1()` and `test_example_part2()` - examples from the puzzle
+   - Additional tests for edge cases, clearly named by part (e.g., `test_edge_case_part2()`)
+5. `run_tests()` function that runs all test functions with organized output (separate Part 1 and Part 2 sections)
 6. Guard: `if __name__ == '__main__':`
 
 ### Best Practices
 
 - Keep each day's solution self-contained within its directory
-- Separate solution logic (`solution.py`) from tests (`test.py`)
+- Separate solution logic from tests (`test.py`)
 - The `solve()` function should accept parsed data directly, not file paths
 - The `solve_from_file()` function handles file I/O separately
 - Accept command-line arguments for input file (default to 'input.txt')
-- **Solution output**: `solution.py` prints only the raw answer for easy piping (e.g., `python3 solution.py | pbcopy`)
+- **Solution output**: Solution scripts print only the raw answer for easy piping (e.g., `python3 solution.py | pbcopy`)
 - **Test output**: `test.py` prints descriptive messages with checkmarks (✓) for passing tests
-- Write multiple test functions to cover edge cases
+- Write multiple test functions to cover edge cases for both parts
 - Use inline comments in tests to show the transformation steps
 - Use modulo arithmetic for circular/wrapping problems (e.g., `(position + offset) % max_value`)
 - **IMPORTANT**: Only use Python standard library modules - no pip packages or external dependencies
+- **CRITICAL**: When changing code structure (splitting files, changing function names, etc.), immediately update the day's README.md in the same session
 
 ### Documentation (README.md)
 
 Each day's `README.md` should include:
-1. **Problem Summary** - Brief description of the puzzle
-2. **Solution Approach** - Algorithm and data structures used
+1. **Problem Summary** - Brief description of the puzzle (both parts)
+2. **Solution Approach** - Algorithm and data structures used (separate sections for Part 1 and Part 2)
+   - Include links to solution files: `[solution_part1.py](solution_part1.py)`
+   - Clearly explain any differences between Part 1 and Part 2 approaches
 3. **Key Insights** - Important observations or techniques
-4. **Test Cases** - Description of test cases and edge cases covered
-5. **Results** - Final answers for Part 1 (and Part 2 when available)
-6. **Running Instructions** - How to run the solution
+4. **Test Cases** - Description of test cases and edge cases covered (for both parts)
+5. **Results** - Final answers for Part 1 and Part 2
+6. **Running Instructions** - Exact commands to run the solution (must match actual file names)
+
+**The README.md must perfectly reflect the actual code structure and file names.**
 
 ## Documentation Maintenance
 
@@ -134,21 +179,88 @@ You MUST update relevant documentation files when making changes:
 1. **Project-level changes** → Update [README.md](README.md):
    - Adding new capabilities or features
    - Modifying project structure
-   - Changing the progress table
+   - **Completing a day's solution** → Update the progress table with Part 1 and Part 2 answers
+   - Changing file structure or naming conventions (e.g., switching to split files)
+   - Modifying mise task commands or workflow
    - **Reference** other files (mise.toml, .vscode/*) rather than duplicating their content
 
-2. **Day-level changes** → Update `days/NN/README.md`:
-   - Implementing Part 2 of a puzzle
+2. **Day-level changes** → **ALWAYS** update `days/NN/README.md`:
+   - **CRITICAL**: Any code changes to a day's solution MUST be reflected in that day's README.md
+   - Implementing Part 2 of a puzzle (update solution approach, results, running instructions)
    - Optimizing the solution approach
    - Adding new test cases
    - Discovering new insights
    - Updating final answers
+   - Changing file structure (e.g., splitting into `solution_part1.py` and `solution_part2.py`)
+   - Modifying function signatures or interfaces
+   - **Never leave README.md stale or inconsistent with the actual implementation**
+
+   **Additional updates when creating/modifying solutions:**
+   - Verify `mise run solve N 1` and `mise run solve N 2` work (N = day number, no zero-padding)
+   - Update test.py imports to use the correct files
+   - Test all commands documented in README.md
 
 3. **Workflow changes** → Update [CLAUDE.md](CLAUDE.md):
    - Modifying code templates or structure
    - Adding new best practices
    - Changing testing approaches
    - Updating development patterns
+
+### README.md Maintenance Rules
+
+#### Day-level README.md (days/NN/README.md)
+
+**The day's README.md is the single source of truth for that day's solution.** It must ALWAYS be kept in sync with the code.
+
+When you make ANY change to a day's solution:
+1. ✅ **DO**: Update the README.md immediately in the same session
+2. ✅ **DO**: Verify that running instructions match the actual file names
+3. ✅ **DO**: Update the solution approach if implementation changes
+4. ✅ **DO**: Update results when you get new answers
+5. ❌ **DON'T**: Leave README.md referencing files that don't exist
+6. ❌ **DON'T**: Leave README.md with incorrect answers
+7. ❌ **DON'T**: Leave README.md describing an approach that's not implemented
+
+#### Project-level README.md (README.md)
+
+**The project README.md must be updated when completing solutions.**
+
+When you complete a day's solution (Part 1, Part 2, or both):
+1. ✅ **DO**: Update the progress table with the correct answers
+2. ✅ **DO**: Update status to ✅ when both parts are complete
+3. ✅ **DO**: Update project structure if file organization changes
+4. ✅ **DO**: Update running instructions if mise commands change
+5. ❌ **DON'T**: Leave the progress table with "-" when you have answers
+6. ❌ **DON'T**: Forget to update after solving Part 2
+
+### Creating a New Day: Complete Checklist
+
+When starting a new day's solution, follow this checklist:
+
+**IMPORTANT:** Use TodoWrite to track this process and ensure nothing is missed!
+
+**Required actions:**
+1. ✅ Create day directory: `days/NN/` (NN = zero-padded day number: 01, 02, etc.)
+2. ✅ Add `INSTRUCTIONS.md` with the puzzle description
+3. ✅ Create `solution_part1.py` with Part 1 logic and proper docstring
+4. ✅ Create `test.py` with Part 1 tests using standard imports:
+   ```python
+   from solution_part1 import solve as solve_part1
+   # from solution_part2 import solve as solve_part2  # Uncomment when Part 2 is ready
+   ```
+5. ✅ Add `input.txt` with your puzzle input
+6. ✅ Create `README.md` documenting the solution
+7. ✅ When Part 2 is revealed:
+   - Create `solution_part2.py` with Part 2 logic
+   - Uncomment Part 2 imports in `test.py`
+   - Add Part 2 tests
+   - Update `README.md` with Part 2 details
+8. ✅ Test everything:
+   - Run `python3 test.py` to ensure all tests pass
+   - Run `mise run solve 1 1` to verify Part 1 works (no zero-padding needed)
+   - Run `mise run solve 1 2` to verify Part 2 works
+
+**Note:** `mise.toml` automatically detects and supports split solution files.
 
 ### Documentation Update Process
 

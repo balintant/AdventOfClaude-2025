@@ -5,16 +5,26 @@ script = "hk install"
 experimental = true
 
 [tasks.solve]
-description = "Run solution for a specific day (e.g., mise run solve 01)"
+description = "Run solution for a specific day and optionally part (e.g., mise run solve 1)"
 run = """
 #!/usr/bin/env bash
 if [ -z "$1" ]; then
-  echo "Usage: mise run solve <day>"
-  echo "Example: mise run solve 01"
+  echo "Usage: mise run solve <day> [<part>]"
+  echo "Example: mise run solve 1 2"
   exit 1
 fi
 DAY=$(printf "%02d" $1)
-cd "days/$DAY" && python3 solution.py
+cd days/$DAY
+
+if [ -n "$2" ]; then
+  # Run specific part
+  python3 solution_part$2.py 2>/dev/null || python3 -c "from solution import solve_part$2; print(solve_part$2([line.strip() for line in open('input.txt')]))"
+else
+  # Run all parts
+  for f in solution_part*.py; do
+    [ -e "$f" ] && python3 "$f"
+  done 2>/dev/null || python3 -c "import solution, inspect; data = [line.strip() for line in open('input.txt')]; [print(fn(data)) for _, fn in sorted([(int(n.replace('solve_part','')), f) for n, f in inspect.getmembers(solution) if n.startswith('solve_part') and callable(f)])]"
+fi
 """
 
 [tasks.test]

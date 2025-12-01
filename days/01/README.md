@@ -9,19 +9,21 @@ The puzzle involves simulating a safe dial with positions 0-99. Starting at posi
 
 ## Solution Approach
 
-### Part 1
+### Part 1 ([solution_part1.py](solution_part1.py))
 The solution uses modulo arithmetic to handle the circular nature of the dial:
 - **Left rotation**: `position = (position - distance) % 100`
 - **Right rotation**: `position = (position + distance) % 100`
+- Count only when the dial ends at position 0 after a complete rotation
 
 The modulo operation ensures proper wrapping at the boundaries (0 ↔ 99).
 
-### Part 2
-In addition to counting when the dial ends at 0, we must count every time it passes through 0 during a rotation:
-- **Complete wraps**: `distance // 100` gives the number of full circles
-- **Partial rotation check**: Detect if we wrap around 0 in the remaining clicks
-  - For left rotation: wrap occurs if `new_position > position`
-  - For right rotation: wrap occurs if `new_position < position`
+### Part 2 ([solution_part2.py](solution_part2.py))
+For each rotation, iterate through every click and check if it lands on 0:
+- For left rotation: Check positions `(position - 1) % 100`, `(position - 2) % 100`, ..., `(position - distance) % 100`
+- For right rotation: Check positions `(position + 1) % 100`, `(position + 2) % 100`, ..., `(position + distance) % 100`
+- Count every instance where the dial points at 0
+
+This brute-force approach is straightforward and handles all edge cases correctly. While not optimized for very large distances, it completes quickly enough for the puzzle input.
 
 ## Key Insights
 

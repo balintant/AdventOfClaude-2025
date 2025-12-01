@@ -12,13 +12,15 @@ This repository is an experiment in AI-assisted development where **all code is 
 AdventOfClaude-2025/
 ├── README.md           # This file
 ├── CLAUDE.md           # Instructions for Claude Code instances
+├── mise.toml           # Tool versions and task definitions
 └── days/               # All daily solutions
     ├── 01/             # Day 1 puzzle solution
-    │   ├── INSTRUCTIONS.md # Puzzle description
-    │   ├── solution.py     # Solution implementation
-    │   ├── test.py         # Test suite
-    │   ├── input.txt       # Puzzle input (user-specific)
-    │   └── README.md       # Solution documentation
+    │   ├── INSTRUCTIONS.md    # Puzzle description
+    │   ├── solution_part1.py  # Part 1 solution
+    │   ├── solution_part2.py  # Part 2 solution
+    │   ├── test.py            # Test suite
+    │   ├── input.txt          # Puzzle input (user-specific)
+    │   └── README.md          # Solution documentation
     ├── 02/             # Day 2 puzzle solution
     │   └── ...
     └── ...
@@ -26,12 +28,30 @@ AdventOfClaude-2025/
 
 Each day's directory contains:
 - **INSTRUCTIONS.md** - The puzzle story and task description from Advent of Code
-- **solution.py** - Python solution that prints only the raw answer (for easy piping)
+- **solution_part1.py** - Part 1 solution that prints only the raw answer (for easy piping)
+- **solution_part2.py** - Part 2 solution that prints only the raw answer (for easy piping)
 - **test.py** - Comprehensive test suite with example cases and edge cases
 - **input.txt** - Personal puzzle input from Advent of Code
 - **README.md** - Documentation of the approach, insights, and results
 
 ## Running Solutions
+
+### Using mise (recommended)
+
+```bash
+# Run all parts for a day
+mise run solve 1
+
+# Run specific part
+mise run solve 1 1      # Part 1
+mise run solve 1 2      # Part 2
+
+# Run tests
+mise run test 1         # Test specific day
+mise run test           # Test all days
+```
+
+### Direct Python execution
 
 Navigate to any day's directory and run:
 
@@ -39,14 +59,15 @@ Navigate to any day's directory and run:
 # Navigate to a specific day (zero-padded)
 cd days/01
 
-# Run the solution (outputs raw answer)
-python3 solution.py
+# Run solutions (outputs raw answer)
+python3 solution_part1.py
+python3 solution_part2.py
 
 # Copy answer directly to clipboard (macOS)
-python3 solution.py | pbcopy
+python3 solution_part2.py | pbcopy
 
 # Run with custom input
-python3 solution.py custom_input.txt
+python3 solution_part1.py custom_input.txt
 
 # Run all tests
 python3 test.py
@@ -139,7 +160,7 @@ This project demonstrates:
 
 | Day | Status | Part 1 | Part 2 |
 |-----|--------|--------|--------|
-| 1   | ✅     | 1105   | -      |
+| 1   | ✅     | 1105   | 6599   |
 | 2   | -      | -      | -      |
 | ... | -      | -      | -      |
 
