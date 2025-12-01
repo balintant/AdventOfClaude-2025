@@ -2,6 +2,24 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Meta-Rule: Maintaining CLAUDE.md
+
+**CRITICAL**: When the user asks you to fix an issue or change behavior:
+
+1. ✅ **ALWAYS** update CLAUDE.md to prevent the issue from recurring
+2. ✅ Add checks, reminders, or validation steps to relevant sections
+3. ✅ Update templates, checklists, or best practices as needed
+4. ✅ Make the fix systematic, not just a one-time correction
+5. ❌ **NEVER** fix an issue without updating CLAUDE.md
+6. ❌ **NEVER** assume the fix is complete until documentation is updated
+
+**Examples:**
+- User reports wrong year in URLs → Update template + checklist with CRITICAL reminders
+- User reports missing README updates → Add explicit requirements to maintenance rules
+- User reports incorrect file structure → Update all references and templates
+
+**Remember:** Every fix should make future instances of Claude Code smarter. If you fix something without updating CLAUDE.md, it WILL happen again.
+
 ## Project Overview
 
 This is an Advent of Code 2025 repository for solving daily programming challenges during December 2025.
@@ -102,6 +120,8 @@ from solution_part2 import solve as solve_part2
 Each solution file should follow this structure:
 1. Shebang line: `#!/usr/bin/env python3`
 2. Docstring with day title, link, and **which part** this solves
+   - **CRITICAL**: URL must use year 2025: `https://adventofcode.com/2025/day/N`
+   - Format: `Day N: <Title> - Part X`
 3. Import `sys` for command-line argument parsing
 4. `solve(data)` function that takes input data directly (list, string, etc.)
    - Single `solve()` function per file (each file handles one part)
@@ -199,12 +219,15 @@ You MUST update relevant documentation files when making changes:
    - Verify `mise run solve N 1` and `mise run solve N 2` work (N = day number, no zero-padding)
    - Update test.py imports to use the correct files
    - Test all commands documented in README.md
+   - **CRITICAL**: Verify docstring URLs use correct year: `https://adventofcode.com/2025/day/N` (NOT 2024!)
 
 3. **Workflow changes** → Update [CLAUDE.md](CLAUDE.md):
    - Modifying code templates or structure
    - Adding new best practices
    - Changing testing approaches
    - Updating development patterns
+   - **CRITICAL**: When fixing ANY issue reported by the user → Update CLAUDE.md to prevent recurrence
+   - Add validation steps, reminders, or checks to prevent the same issue in future sessions
 
 ### README.md Maintenance Rules
 
@@ -243,6 +266,7 @@ When starting a new day's solution, follow this checklist:
 1. ✅ Create day directory: `days/NN/` (NN = zero-padded day number: 01, 02, etc.)
 2. ✅ Add `INSTRUCTIONS.md` with the puzzle description
 3. ✅ Create `solution_part1.py` with Part 1 logic and proper docstring
+   - **CRITICAL**: Verify URL is `https://adventofcode.com/2025/day/N` (year 2025, NOT 2024!)
 4. ✅ Create `test.py` with Part 1 tests using standard imports:
    ```python
    from solution_part1 import solve as solve_part1
@@ -252,9 +276,11 @@ When starting a new day's solution, follow this checklist:
 6. ✅ Create `README.md` documenting the solution
 7. ✅ When Part 2 is revealed:
    - Create `solution_part2.py` with Part 2 logic
+   - **CRITICAL**: Verify URL is `https://adventofcode.com/2025/day/N` (year 2025, NOT 2024!)
    - Uncomment Part 2 imports in `test.py`
    - Add Part 2 tests
    - Update `README.md` with Part 2 details
+   - Update project `README.md` progress table with both Part 1 and Part 2 answers
 8. ✅ Test everything:
    - Run `python3 test.py` to ensure all tests pass
    - Run `mise run solve 1 1` to verify Part 1 works (no zero-padding needed)

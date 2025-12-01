@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Day 1: Secret Entrance - Part 2
-https://adventofcode.com/2024/day/1
+https://adventofcode.com/2025/day/1
 
 Task: Count how many times the dial points at 0 DURING OR AFTER rotations.
 - Dial has positions 0-99 (circular)
