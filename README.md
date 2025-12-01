@@ -1,4 +1,4 @@
-# Advent of Code 2025
+# Advent of Claude 2025
 
 A collection of solutions for the [Advent of Code 2025](https://adventofcode.com/2025) programming challenges, solved using **pure vibe coding** with Claude Code.
 
@@ -9,7 +9,7 @@ This repository is an experiment in AI-assisted development where **all code is 
 ## Project Structure
 
 ```
-advent-of-code-2025/
+AdventOfClaude-2025/
 ├── README.md           # This file
 ├── CLAUDE.md           # Instructions for Claude Code instances
 └── days/               # All daily solutions
@@ -103,8 +103,8 @@ All solutions follow consistent patterns:
 
 ```bash
 # Clone and setup
-git clone <repository-url>
-cd advent-of-code-2025
+git clone https://github.com/balintant/AdventOfClaude-2025
+cd AdventOfClaude-2025
 mise install
 
 # Run a day's solution
