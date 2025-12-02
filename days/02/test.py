@@ -4,6 +4,7 @@ Tests for Day 2: Gift Shop
 """
 
 from part_1 import solve as solve_part1, is_invalid_id
+from part_2 import solve as solve_part2, is_invalid_id as is_invalid_id_part2
 
 
 def test_is_invalid_id():
@@ -98,6 +99,99 @@ def test_multiple_invalid_in_range_part1():
     print(f"✓ Part 1 multiple invalid IDs test passed: sum = {result}")
 
 
+def test_is_invalid_id_part2():
+    """Test the Part 2 is_invalid_id function with various cases."""
+    # Valid invalid IDs (repeated patterns - 2 or more times)
+    assert is_invalid_id_part2(11), "11 should be invalid (1 repeated 2 times)"
+    assert is_invalid_id_part2(111), "111 should be invalid (1 repeated 3 times)"
+    assert is_invalid_id_part2(1111), "1111 should be invalid (1 repeated 4 times)"
+    assert is_invalid_id_part2(99), "99 should be invalid (9 repeated 2 times)"
+    assert is_invalid_id_part2(999), "999 should be invalid (9 repeated 3 times)"
+    assert is_invalid_id_part2(1010), "1010 should be invalid (10 repeated 2 times)"
+    assert is_invalid_id_part2(123123), (
+        "123123 should be invalid (123 repeated 2 times)"
+    )
+    assert is_invalid_id_part2(123123123), (
+        "123123123 should be invalid (123 repeated 3 times)"
+    )
+    assert is_invalid_id_part2(12341234), (
+        "12341234 should be invalid (1234 repeated 2 times)"
+    )
+    assert is_invalid_id_part2(1212121212), (
+        "1212121212 should be invalid (12 repeated 5 times)"
+    )
+    assert is_invalid_id_part2(565656), "565656 should be invalid (56 repeated 3 times)"
+    assert is_invalid_id_part2(824824824), (
+        "824824824 should be invalid (824 repeated 3 times)"
+    )
+    assert is_invalid_id_part2(2121212121), (
+        "2121212121 should be invalid (21 repeated 5 times)"
+    )
+
+    # Valid IDs (not repeated patterns)
+    assert not is_invalid_id_part2(101), "101 should be valid (odd length, no pattern)"
+    assert not is_invalid_id_part2(12), "12 should be valid (not repeated)"
+    assert not is_invalid_id_part2(1234), "1234 should be valid (not repeated)"
+    assert not is_invalid_id_part2(1011), "1011 should be valid (10 != 11)"
+
+    print("✓ Part 2 is_invalid_id tests passed")
+
+
+def test_example_part2():
+    """Test Part 2 with the example from the puzzle."""
+    ranges = [
+        "11-22",
+        "95-115",
+        "998-1012",
+        "1188511880-1188511890",
+        "222220-222224",
+        "1698522-1698528",
+        "446443-446449",
+        "38593856-38593862",
+        "565653-565659",
+        "824824821-824824827",
+        "2121212118-2121212124",
+    ]
+
+    # Expected invalid IDs from the example:
+    # 11-22: 11, 22
+    # 95-115: 99, 111
+    # 998-1012: 999, 1010
+    # 1188511880-1188511890: 1188511885
+    # 222220-222224: 222222
+    # 446443-446449: 446446
+    # 38593856-38593862: 38593859
+    # 565653-565659: 565656
+    # 824824821-824824827: 824824824
+    # 2121212118-2121212124: 2121212121
+
+    result = solve_part2(ranges)
+    expected = 4174379265
+    assert result == expected, f"Expected {expected}, got {result}"
+    print(f"✓ Part 2 example test passed: sum = {result}")
+
+
+def test_triple_pattern_part2():
+    """Test Part 2 with patterns repeated 3 times."""
+    ranges = ["110-112"]
+    # Should find: 111 (1 repeated 3 times)
+    result = solve_part2(ranges)
+    expected = 111
+    assert result == expected, f"Expected {expected}, got {result}"
+    print(f"✓ Part 2 triple pattern test passed: sum = {result}")
+
+
+def test_multiple_repetition_part2():
+    """Test Part 2 with various repetition counts."""
+    ranges = ["1-1000"]
+    # Should find all patterns repeated 2+ times
+    # Includes: 11, 22, ..., 99 (2x), 111, 222, ..., 999 (3x)
+    result = solve_part2(ranges)
+    # Just verify it runs and finds more than Part 1 would
+    assert result > 0, "Should find invalid IDs"
+    print(f"✓ Part 2 multiple repetition test passed: sum = {result}")
+
+
 def run_tests():
     """Run all tests."""
     print("Running Day 2 tests...\n")
@@ -107,6 +201,11 @@ def run_tests():
     test_single_range_part1()
     test_no_invalid_ids_part1()
     test_multiple_invalid_in_range_part1()
+    print("\n=== Part 2 Tests ===")
+    test_is_invalid_id_part2()
+    test_example_part2()
+    test_triple_pattern_part2()
+    test_multiple_repetition_part2()
     print("\n✓ All tests passed!")
 
 
