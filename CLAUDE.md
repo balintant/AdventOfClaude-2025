@@ -203,6 +203,63 @@ for row_idx, line in enumerate(test_data.split('\n')):
 - Part 2 often requires rethinking Part 1's approach for efficiency
 - **When instructions reference external links, those links often contain critical information**
 
+### Algorithmic Optimization and Performance
+
+**CRITICAL**: When a solution times out or is too slow, STOP and re-think the approach. Advent of Code solutions should run in seconds, not minutes.
+
+**Red Flags** (indicates you need a better algorithm):
+- Solution takes >30 seconds to run
+- You're iterating through ranges of 10,000+ consecutive integers
+- You're checking every point in a large coordinate space
+- You're doing O(n³) or worse operations on large inputs
+- User says "this should be simple" or "there must be a mathematical solution"
+
+**Key Insight: Sparse vs Dense Data**
+- **Sparse data**: Few actual data points in a huge coordinate space (e.g., 500 points in a 100,000×100,000 grid)
+- **Dense data**: Most coordinates contain data
+- **If sparse, work ONLY with the actual data points, not the entire coordinate space**
+
+**Example - Day 9 Learning:**
+- **Problem**: 496 red tiles with coordinates up to ~98,000
+- **Naive approach**: Check every integer y-coordinate from 0 to 98,000 → Times out
+- **Optimized approach**: Only check the 496 y-coordinates where vertices exist → Completes in <30 seconds
+- **Improvement**: 100× faster by recognizing sparse data structure
+
+**Optimization Strategies:**
+
+1. **Sparse Coordinate Processing**:
+   - When coordinates are huge but data points are few, only process actual data points
+   - Use sets/dicts for O(1) lookups instead of iterating through ranges
+   - Example: Instead of `for y in range(0, 100000)`, use `for y in sorted(set(y for x, y in points))`
+
+2. **Interval Arithmetic**:
+   - Instead of checking every point in a range, check if entire intervals are valid
+   - Merge/split intervals for efficient range operations
+   - Example: Check if [x_min, x_max] is contained in union of intervals, not every x
+
+3. **Scanline Algorithms**:
+   - For 2D problems, process one row/column at a time
+   - Build interval maps for fast lookups: y → x-ranges where condition is true
+   - Useful for rectilinear polygons, filled regions, intersection problems
+
+4. **Early Termination**:
+   - Sort candidates by priority (e.g., largest first)
+   - Return as soon as first valid solution is found
+   - Check quick rejection conditions before expensive validation
+
+5. **Pre-computation**:
+   - Compute expensive structures once (edge lists, interval maps, lookup tables)
+   - Use caching for repeated calculations
+   - Balance pre-computation cost vs per-query cost
+
+**When to Ask for Help:**
+If you've tried multiple approaches and still timing out:
+1. State what you've tried and why each failed
+2. Explain the bottleneck (e.g., "checking 50,000 y-coordinates × 100,000 x-coordinates")
+3. Ask user: "What mathematical property or algorithm am I missing?"
+
+**Remember**: Part 2 is often VERY different from Part 1. Don't just optimize Part 1's approach—sometimes you need a completely different algorithm.
+
 ### File Structure Philosophy
 
 **Always use split files:**

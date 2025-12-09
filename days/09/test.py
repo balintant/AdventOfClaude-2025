@@ -4,7 +4,7 @@ Test suite for Day 9: Movie Theater
 """
 
 from part_1 import solve as solve_part1
-# from part_2 import solve as solve_part2  # Uncomment when Part 2 is ready
+from part_2 import solve as solve_part2
 
 
 def test_example_part1():
@@ -60,6 +60,44 @@ def test_square_part1():
     print(f"✓ Square test passed: {result}")
 
 
+def test_example_part2():
+    """Test Part 2 with the example from the puzzle description."""
+    data = [
+        "7,1",
+        "11,1",
+        "11,7",
+        "9,7",
+        "9,5",
+        "2,5",
+        "2,3",
+        "7,3",
+    ]
+
+    result = solve_part2(data)
+    expected = 24  # Rectangle between (9,5) and (2,3): largest valid area
+
+    assert result == expected, f"Expected {expected}, got {result}"
+    print(f"✓ Example test passed: {result}")
+
+
+def test_small_rectangle_part2():
+    """Test Part 2 with a small rectangle."""
+    # Simple 3x3 square of red tiles
+    data = [
+        "0,0",
+        "2,0",
+        "2,2",
+        "0,2",
+    ]
+
+    result = solve_part2(data)
+    # Should be 9 (3x3 square, all tiles are red or green)
+    expected = 9
+
+    assert result == expected, f"Expected {expected}, got {result}"
+    print(f"✓ Small rectangle test passed: {result}")
+
+
 def run_tests():
     """Run all test functions."""
     print("=== Part 1 Tests ===")
@@ -69,7 +107,8 @@ def run_tests():
     test_square_part1()
 
     print("\n=== Part 2 Tests ===")
-    print("(Part 2 not yet implemented)")
+    test_example_part2()
+    test_small_rectangle_part2()
 
     print("\n✓ All tests passed!")
 
