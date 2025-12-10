@@ -1,5 +1,5 @@
 Day 10: Factory
--0--
+---
 
 Just across the hall, you find a large factory. Fortunately, the Elves here have plenty of time to decorate. Unfortunately, it's because the factory machines are all offline, and none of the Elves can figure out the initialization procedure.
 
