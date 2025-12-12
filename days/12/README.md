@@ -4,7 +4,9 @@
 
 ## Problem Summary
 
-Determine how many regions under Christmas trees can fit all their required presents. Presents come in 6 standard polyomino shapes that can be rotated and flipped. Each region specifies its dimensions and the quantity of each shape type that must fit inside. Shapes cannot overlap (their `#` cells can't occupy the same grid position), but they can fit together (the `.` cells in a shape's definition don't block other shapes).
+**Part 1**: Determine how many regions under Christmas trees can fit all their required presents. Presents come in 6 standard polyomino shapes that can be rotated and flipped. Each region specifies its dimensions and the quantity of each shape type that must fit inside. Shapes cannot overlap (their `#` cells can't occupy the same grid position), but they can fit together (the `.` cells in a shape's definition don't block other shapes).
+
+**Part 2**: Narrative conclusion - the Elves are grateful, a star magically appears on a Christmas tree. No additional puzzle to solve.
 
 ## Solution Approach
 
@@ -55,6 +57,8 @@ All tests in [test.py](test.py):
 ## Results
 
 **Part 1**: 414 regions can fit all their presents (out of 1000 total)
+
+**Part 2**: ⭐ (narrative conclusion - no computation required)
 
 ## Running Instructions
 
